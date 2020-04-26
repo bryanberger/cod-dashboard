@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./db
+      args:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER_INSERT}
+        - MYSQL_PASSWORD=${MYSQL_USER_INSERT_PASSWORD}
+    restart: always
+    networks:
+      - default
+    expose:
+      - '3306'
+    volumes:
+      - data:/var/lib/mysql
+
+  api:
+    build:
+      context: ./api
+      args:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER_INSERT=${MYSQL_USER_INSERT}
+        - MYSQL_USER_INSERT_PASSWORD=${MYSQL_USER_INSERT_PASSWORD}
+        - COD_API_EMAIL=${COD_API_EMAIL}
+        - COD_API_PASSWORD=${COD_API_PASSWORD}
+    networks:
+      - default
+    command: dockerize -wait tcp://db:3306 -timeout 2m -wait-retry-interval 5s bin/start
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  data:
+
+networks:
+  default:
+    external: false

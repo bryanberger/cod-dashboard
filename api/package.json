@@ -1,0 +1,17 @@
+{
+  "name": "cod_dashboard",
+  "version": "1.0.0",
+  "description": "team cod stats recorded hourly to mysql db, to be ingested by grafana",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "call-of-duty-api": "git+https://github.com/Lierrmm/Node-CallOfDuty.git",
+    "dotenv": "^8.2.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.7"
+  }
+}
