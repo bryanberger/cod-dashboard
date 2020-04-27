@@ -8,6 +8,8 @@ services:
         - MYSQL_DATABASE=${MYSQL_DATABASE}
         - MYSQL_USER=${MYSQL_USER_INSERT}
         - MYSQL_PASSWORD=${MYSQL_USER_INSERT_PASSWORD}
+        - MYSQL_USER_SELECT=${MYSQL_USER_SELECT}
+        - MYSQL_USER_SELECT_PASSWORD=${MYSQL_USER_SELECT_PASSWORD}
     restart: always
     networks:
       - default
@@ -15,6 +17,7 @@ services:
       - '3306:3306'
     volumes:
       - data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
 
   api:
     build:
@@ -27,6 +30,8 @@ services:
         - COD_API_PASSWORD=${COD_API_PASSWORD}
     networks:
       - default
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     command: dockerize -wait tcp://db:3306 -timeout 2m -wait-retry-interval 2s bin/start
     depends_on:
       - db
