@@ -1,46 +1,47 @@
-const { Sequelize } = require('sequelize')
+const db = require('./models')
 const API = require('call-of-duty-api')({
   platform: 'battle',
-  ratelimit: { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 },
+  ratelimit: { maxRequests: 1, perMilliseconds: 2500, maxRPS: 2 },
 })
-
 const gamerTags = require('./gamerTags.json')
+const LOOP_TIMEOUT = 15 * 60 * 1000
 
 const initDb = async () => {
-  const sequelize = new Sequelize(
-    process.env.MYSQL_DATABASE,
-    process.env.MYSQL_USER_INSERT,
-    process.env.MYSQL_USER_INSERT_PASSWORD,
-    {
-      host: 'db',
-      dialect: 'mysql',
-    },
-  )
-
   try {
-    await sequelize.authenticate()
-    console.log('Connection has been established successfully.')
+    await db.sequelize.sync()
   } catch (error) {
-    console.error('Unable to connect to the database:', error)
+    console.error('[Database] Error:', error)
   }
 }
 
 const init = async () => {
   try {
     await initDb()
-    //await API.login(process.env.COD_API_EMAIL, process.env.COD_API_PASSWORD)
-    //await mapGamerTags()
+    await API.login(process.env.COD_API_EMAIL, process.env.COD_API_PASSWORD)
+    await mapGamerTags()
   } catch (error) {
-    console.error(error)
+    console.error('[COD API] Error:', error)
   }
 }
 
 const mapGamerTags = async () => {
-  gamerTags.map(async (gamer) => {
-    console.log(gamer)
-    const wz = await API.MWwz(gamer)
-    // insert
-  })
+  try {
+    gamerTags.map(async (gamerTag) => {
+      console.log(`[COD API] Fetching data for: ${gamerTag}`)
+      const wz = await API.MWwz(gamerTag)
+      await db.br_all.create({
+        gamerTag: gamerTag,
+        ...wz.br_all,
+      })
+      console.log(`[COD API] Inserted data for: ${gamerTag}`)
+    })
+  } catch (error) {
+    console.error('[COD API/Database Error:]', error)
+  }
 }
+
+const loop = setInterval(async () => {
+  await awaitmapGamerTags()
+}, LOOP_TIMEOUT)
 
 init()

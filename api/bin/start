@@ -1,3 +1,5 @@
 #!/bin/bash
-
-npm start
+cd src
+npx sequelize-cli db:create
+npx sequelize-cli db:migrate
+node index.js

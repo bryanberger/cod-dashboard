@@ -4,14 +4,18 @@
   "description": "team cod stats recorded hourly to mysql db, to be ingested by grafana",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "nodemon src/index.js"
   },
-  "author": "",
+  "author": "@bryanberger",
   "license": "ISC",
+  "repository": "https://github.com/bryanberger",
   "dependencies": {
     "call-of-duty-api": "git+https://github.com/Lierrmm/Node-CallOfDuty.git",
-    "dotenv": "^8.2.0",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3",
+    "sequelize-cli": "^5.5.1"
   }
 }

@@ -11,11 +11,10 @@ services:
     restart: always
     networks:
       - default
-    expose:
-      - '3306'
+    ports:
+      - '3306:3306'
     volumes:
       - data:/var/lib/mysql
-
   api:
     build:
       context: ./api
@@ -27,15 +26,13 @@ services:
         - COD_API_PASSWORD=${COD_API_PASSWORD}
     networks:
       - default
-    command: dockerize -wait tcp://db:3306 -timeout 2m -wait-retry-interval 5s bin/start
+    command: dockerize -wait tcp://db:3306 -timeout 2m -wait-retry-interval 2s bin/start
     depends_on:
       - db
     links:
       - db
-
 volumes:
   data:
-
 networks:
   default:
     external: false
