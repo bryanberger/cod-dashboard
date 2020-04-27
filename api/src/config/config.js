@@ -5,7 +5,10 @@ module.exports = {
     database: process.env.MYSQL_DATABASE,
     host: 'db',
     dialect: 'mysql',
-    timezone: 'America/New_York',
+    timezone: '+00:00',
+    dialectOptions: {
+      useUTC: true,
+    },
   },
   test: {
     username: process.env.MYSQL_USER_INSERT,
@@ -13,7 +16,10 @@ module.exports = {
     database: process.env.MYSQL_DATABASE,
     host: 'db',
     dialect: 'mysql',
-    timezone: 'America/New_York',
+    timezone: '+00:00',
+    dialectOptions: {
+      useUTC: true,
+    },
   },
   production: {
     username: process.env.MYSQL_USER_INSERT,
@@ -21,6 +27,9 @@ module.exports = {
     database: process.env.MYSQL_DATABASE,
     host: 'db',
     dialect: 'mysql',
-    timezone: 'America/New_York',
+    timezone: '+00:00',
+    dialectOptions: {
+      useUTC: true,
+    },
   },
 }
