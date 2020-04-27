@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     'br_all',
     {
       gamerTag: DataTypes.STRING,
+      wins: DataTypes.INTEGER,
       kills: DataTypes.INTEGER,
       kdRatio: DataTypes.FLOAT,
       downs: DataTypes.INTEGER,

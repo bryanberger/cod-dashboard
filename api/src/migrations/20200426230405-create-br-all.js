@@ -14,6 +14,9 @@ module.exports = {
       kills: {
         type: Sequelize.INTEGER,
       },
+      wins: {
+        type: Sequelize.INTEGER,
+      },
       kdRatio: {
         type: Sequelize.FLOAT,
       },
@@ -58,7 +61,7 @@ module.exports = {
       },
       time: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: 'DATETIME',
       },
     })
   },
