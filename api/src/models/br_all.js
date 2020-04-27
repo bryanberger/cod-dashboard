@@ -21,9 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
     },
     {
-      // I want `updatedAt` to actually be called `time`, for use in grafana
+      // I want `createdAt` to actually be called `time`, for use in grafana
       timestamps: true,
       createdAt: 'time',
+      updatedAt: false,
     },
   )
   br_all.associate = function (models) {

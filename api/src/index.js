@@ -41,7 +41,11 @@ const mapGamerTags = async () => {
 }
 
 const loop = setInterval(async () => {
-  await awaitmapGamerTags()
+  try {
+    await mapGamerTags()
+  } catch (error) {
+    console.log('[LOOP] Error:', error)
+  }
 }, LOOP_TIMEOUT)
 
 init()

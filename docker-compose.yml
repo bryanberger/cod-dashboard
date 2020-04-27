@@ -15,6 +15,7 @@ services:
       - '3306:3306'
     volumes:
       - data:/var/lib/mysql
+
   api:
     build:
       context: ./api
@@ -31,8 +32,10 @@ services:
       - db
     links:
       - db
+
 volumes:
   data:
+
 networks:
   default:
     external: false
