@@ -28,6 +28,7 @@ module.exports = {
     host: 'db',
     dialect: 'mysql',
     timezone: '+00:00',
+    logging: false,
     dialectOptions: {
       useUTC: true,
     },
