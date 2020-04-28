@@ -1,3 +1,5 @@
+Feeds a MySQL Database with COD Warzone Stats for supplied battle.net `gamerTags`. The data is timestamped, and can then be used for visualization in Grafana.
+
 ## Setup
 
 Copy and make changes to `.env.example`
