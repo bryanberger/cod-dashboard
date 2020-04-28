@@ -29,11 +29,18 @@ const mapGamerTags = async () => {
     gamerTags.map(async (gamerTag) => {
       console.log(`[COD API] Fetching data for: ${gamerTag}`)
       const wz = await API.MWwz(gamerTag)
-      await db.br_all.create({
+      const params = {
         gamerTag: gamerTag,
         ...wz.br_all,
+      }
+      const [, wasInserted] = await db.br_all.findOrCreate({
+        where: params,
       })
-      console.log(`[COD API] Inserted data for: ${gamerTag}`)
+      if (wasInserted) {
+        console.log(`[COD API] Inserted data for: ${gamerTag}`)
+      } else {
+        console.log(`[COD API] Skip. Record already found for: ${gamerTag}`)
+      }
     })
   } catch (error) {
     console.error('[COD API/Database Error:]', error)
