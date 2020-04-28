@@ -29,12 +29,11 @@ const mapGamerTags = async () => {
     gamerTags.map(async (gamerTag) => {
       console.log(`[COD API] Fetching data for: ${gamerTag}`)
       const wz = await API.MWwz(gamerTag)
-      const params = {
-        gamerTag: gamerTag,
-        ...wz.br_all,
-      }
       const [, wasInserted] = await db.br_all.findOrCreate({
-        where: params,
+        where: {
+          gamerTag: gamerTag,
+          ...wz.br_all,
+        },
       })
       if (wasInserted) {
         console.log(`[COD API] Inserted data for: ${gamerTag}`)
