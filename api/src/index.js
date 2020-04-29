@@ -29,7 +29,7 @@ const mapGamerTags = async () => {
     console.log(`[COD API] Fetching data for: ${gamerTag}`)
     try {
       const wz = await API.MWwz(gamerTag)
-      if (wz.hasOwnProperty('br_allzz')) {
+      if (wz.hasOwnProperty('br_all')) {
         await db.br_all.create({
           gamerTag: gamerTag,
           ...wz.br_all,
