@@ -25,25 +25,23 @@ const init = async () => {
 }
 
 const mapGamerTags = async () => {
-  try {
-    gamerTags.map(async (gamerTag) => {
-      console.log(`[COD API] Fetching data for: ${gamerTag}`)
+  gamerTags.map(async (gamerTag) => {
+    console.log(`[COD API] Fetching data for: ${gamerTag}`)
+    try {
       const wz = await API.MWwz(gamerTag)
-      const [, wasInserted] = await db.br_all.findOrCreate({
-        where: {
+      if (wz.hasOwnProperty('br_all')) {
+        await db.br_all.create({
           gamerTag: gamerTag,
           ...wz.br_all,
-        },
-      })
-      if (wasInserted) {
+        })
         console.log(`[COD API] Inserted data for: ${gamerTag}`)
       } else {
-        console.log(`[COD API] Skip. Record already found for: ${gamerTag}`)
+        throw new Error('api response error')
       }
-    })
-  } catch (error) {
-    console.error('[COD API/Database Error:]', error)
-  }
+    } catch (error) {
+      console.error('[COD API/Database Error:]', error)
+    }
+  })
 }
 
 const loop = setInterval(async () => {
