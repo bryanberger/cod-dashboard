@@ -26,25 +26,28 @@ const init = async () => {
 
 const mapGamerTags = async () => {
   const bulk = []
-  gamerTags.map(async (gamerTag) => {
-    console.log(`[COD API] Fetching data for: ${gamerTag}`)
-    try {
-      const wz = await API.MWwz(gamerTag)
-      if (wz.hasOwnProperty('br_all')) {
-        bulk.push({
-          gamerTag: gamerTag,
-          ...wz.br_all,
-        })
-      } else {
-        throw new Error('api response error')
+  await Promise.all(
+    gamerTags.map(async (gamerTag) => {
+      console.log(`[COD API] Fetching data for: ${gamerTag}`)
+      try {
+        const wz = await API.MWwz(gamerTag)
+        if (wz.hasOwnProperty('br_all')) {
+          bulk.push({
+            gamerTag: gamerTag,
+            ...wz.br_all,
+          })
+        } else {
+          throw new Error('api response error')
+        }
+      } catch (error) {
+        console.error('[COD API/Database Error:]', error)
       }
-    } catch (error) {
-      console.error('[COD API/Database Error:]', error)
-    }
-  })
-
-  await db.br_all.bulkCreate(...bulk)
-  console.log(`[COD API] Inserted data`)
+    }),
+  )
+  if (bulk.length > 0) {
+    await db.br_all.bulkCreate(bulk)
+    console.log(`[COD API] Inserted data`)
+  }
 }
 
 const loop = setInterval(async () => {
