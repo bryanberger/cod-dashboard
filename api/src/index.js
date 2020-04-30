@@ -25,16 +25,16 @@ const init = async () => {
 }
 
 const mapGamerTags = async () => {
+  const bulk = []
   gamerTags.map(async (gamerTag) => {
     console.log(`[COD API] Fetching data for: ${gamerTag}`)
     try {
       const wz = await API.MWwz(gamerTag)
       if (wz.hasOwnProperty('br_all')) {
-        await db.br_all.create({
+        bulk.push({
           gamerTag: gamerTag,
           ...wz.br_all,
         })
-        console.log(`[COD API] Inserted data for: ${gamerTag}`)
       } else {
         throw new Error('api response error')
       }
@@ -42,14 +42,32 @@ const mapGamerTags = async () => {
       console.error('[COD API/Database Error:]', error)
     }
   })
+
+  await db.br_all.bulkCreate(...bulk)
+  console.log(`[COD API] Inserted data`)
 }
 
 const loop = setInterval(async () => {
   try {
     await mapGamerTags()
   } catch (error) {
-    console.log('[LOOP] Error:', error)
+    console.error('[LOOP] Error:', error)
   }
 }, LOOP_TIMEOUT)
+
+const shutdown = () => {
+  console.log('Shutdown')
+  clearInterval(loop)
+  db.sequelize.close()
+  process.exit(0)
+}
+
+process.on('SIGINT', () => {
+  shutdown()
+})
+
+process.on('SIGTERM', () => {
+  shutdown()
+})
 
 init()
