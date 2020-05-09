@@ -6,9 +6,6 @@ module.exports = {
     host: 'db',
     dialect: 'mysql',
     timezone: '+00:00',
-    dialectOptions: {
-      useUTC: true,
-    },
   },
   test: {
     username: process.env.MYSQL_USER_INSERT,
@@ -17,9 +14,6 @@ module.exports = {
     host: 'db',
     dialect: 'mysql',
     timezone: '+00:00',
-    dialectOptions: {
-      useUTC: true,
-    },
   },
   production: {
     username: process.env.MYSQL_USER_INSERT,
@@ -29,8 +23,5 @@ module.exports = {
     dialect: 'mysql',
     timezone: '+00:00',
     logging: false,
-    dialectOptions: {
-      useUTC: true,
-    },
   },
 }

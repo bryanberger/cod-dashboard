@@ -1,7 +1,7 @@
 const db = require('./models')
 const API = require('call-of-duty-api')({
   platform: 'battle',
-  ratelimit: { maxRequests: 1, perMilliseconds: 2500, maxRPS: 2 },
+  ratelimit: { maxRequests: 1, perMilliseconds: 3000 },
 })
 const gamerTags = require('./gamerTags.json')
 const LOOP_TIMEOUT = 15 * 60 * 1000
@@ -28,11 +28,11 @@ const mapGamerTags = async () => {
   const bulk = []
   await Promise.all(
     gamerTags.map(async (gamerTag) => {
-      console.log(`[COD API] Fetching data for: ${gamerTag}`)
       try {
         const wz = await API.MWwz(gamerTag)
         if (wz.hasOwnProperty('br_all')) {
-          bulk.push({
+          console.log(`[COD API] Got data for: ${gamerTag}`)
+          return bulk.push({
             gamerTag: gamerTag,
             ...wz.br_all,
           })
