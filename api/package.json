@@ -14,7 +14,8 @@
     "call-of-duty-api": "git+https://github.com/Lierrmm/Node-CallOfDuty.git",
     "dotenv": "^8.2.0",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.21.7"
+    "sequelize": "^5.21.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "sequelize-cli": "^5.5.1"

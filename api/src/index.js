@@ -1,4 +1,5 @@
 const db = require('./models')
+const logger = require('./logger')
 const API = require('call-of-duty-api')({
   platform: 'battle',
   ratelimit: { maxRequests: 1, perMilliseconds: 3000 },
@@ -10,7 +11,7 @@ const initDb = async () => {
   try {
     await db.sequelize.sync()
   } catch (error) {
-    console.error('[Database] Error:', error)
+    logger.error('[Database] Error:', error)
   }
 }
 
@@ -20,7 +21,7 @@ const init = async () => {
     await API.login(process.env.COD_API_EMAIL, process.env.COD_API_PASSWORD)
     await mapGamerTags()
   } catch (error) {
-    console.error('[COD API] Error:', error)
+    logger.error('[COD API] Error:', error)
   }
 }
 
@@ -31,22 +32,27 @@ const mapGamerTags = async () => {
       try {
         const wz = await API.MWwz(gamerTag)
         if (wz.hasOwnProperty('br_all')) {
-          console.log(`[COD API] Got data for: ${gamerTag}`)
+          logger.info(`[COD API] Got data for: ${gamerTag}`)
+          if (
+            Object.keys(wz.br_all).length === 0 &&
+            obj.constructor === Object
+          ) {
+            logger.error(`[COD API] Data was null for: ${gamerTag}`)
+            return
+          }
           return bulk.push({
             gamerTag: gamerTag,
             ...wz.br_all,
           })
-        } else {
-          throw new Error('api response error')
         }
       } catch (error) {
-        console.error('[COD API/Database Error:]', error)
+        logger.error(`[COD API/Database Error] for ${gamerTag}`, error)
       }
     }),
   )
   if (bulk.length > 0) {
     await db.br_all.bulkCreate(bulk)
-    console.log(`[COD API] Inserted data`)
+    logger.info(`[COD API] Inserted data`)
   }
 }
 
@@ -54,12 +60,12 @@ const loop = setInterval(async () => {
   try {
     await mapGamerTags()
   } catch (error) {
-    console.error('[LOOP] Error:', error)
+    logger.error('[LOOP] Error:', error)
   }
 }, LOOP_TIMEOUT)
 
 const shutdown = () => {
-  console.log('Shutdown')
+  logger.info('Shutdown')
   clearInterval(loop)
   db.sequelize.close()
   process.exit(0)

@@ -31,6 +31,7 @@ services:
     networks:
       - default
     volumes:
+      - logs:/usr/src/app/logs
       - /etc/localtime:/etc/localtime:ro
     command: dockerize -wait tcp://db:3306 -timeout 2m -wait-retry-interval 2s bin/start
     depends_on:
@@ -40,6 +41,7 @@ services:
 
 volumes:
   data:
+  logs:
 
 networks:
   default:
