@@ -28,6 +28,7 @@ services:
         - MYSQL_USER_INSERT_PASSWORD=${MYSQL_USER_INSERT_PASSWORD}
         - COD_API_EMAIL=${COD_API_EMAIL}
         - COD_API_PASSWORD=${COD_API_PASSWORD}
+    restart: always
     networks:
       - default
     volumes:
