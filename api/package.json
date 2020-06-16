@@ -11,7 +11,7 @@
   "license": "ISC",
   "repository": "https://github.com/bryanberger",
   "dependencies": {
-    "call-of-duty-api": "github:Lierrmm/Node-CallOfDuty",
+    "call-of-duty-api": "^1.2.3",
     "dotenv": "^8.2.0",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.7",
